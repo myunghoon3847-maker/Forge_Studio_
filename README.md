@@ -24,12 +24,13 @@ npm run dev
 
 ```powershell
 npm run build
+npm run test:pages
 npm run test:all
 npm run audit
 npm run licenses
 ```
 
-`test:all`은 lint, format, 46개 unit/integration test, production build, Chrome·Edge E2E를 순서대로 실행한다. 성능 기준 Scene의 5분 검수는 별도로 실행한다.
+`test:pages`는 GitHub Pages 저장소 하위 경로를 모의해 production CSS·JavaScript·WebGL2 초기화를 Chrome·Edge에서 확인한다. `test:all`은 lint, format, 46개 unit/integration test, production build와 artifact 검사, Chrome·Edge E2E를 순서대로 실행한다. 성능 기준 Scene의 5분 검수는 별도로 실행한다.
 
 ```powershell
 npm run performance
