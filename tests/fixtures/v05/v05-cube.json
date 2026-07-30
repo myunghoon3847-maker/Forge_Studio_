@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "objects": [
+    {
+      "type": "box",
+      "name": "큐브 1",
+      "color": 2068218,
+      "roughness": 0.55,
+      "metalness": 0.05,
+      "position": [0, 1.1, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    }
+  ]
+}

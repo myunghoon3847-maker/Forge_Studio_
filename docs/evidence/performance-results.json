@@ -1,0 +1,54 @@
+{
+  "measuredAt": "2026-07-30T15:08:15.604Z",
+  "scene": {
+    "meshCount": 200,
+    "triangleCount": 100000,
+    "uniqueMaterialValues": 30,
+    "textures": 0
+  },
+  "method": {
+    "viewport": [1920, 1080],
+    "devicePixelRatio": 1,
+    "warmupMs": 10000,
+    "orbitSampleMs": 60000,
+    "totalInteractionMs": 300000,
+    "browserChannel": "chrome",
+    "headless": true
+  },
+  "measurements": {
+    "averageFps": 59.99200106652465,
+    "p95FrameTimeMs": 16.80000000000291,
+    "coldStartMs": 563.5086000000001,
+    "saveMs": 117.94200000000001,
+    "loadMs": 441.41399999999976,
+    "undoMs": 191.90110000000004,
+    "redoMs": 132.76850000000013,
+    "inputResponseMs": 37.59999999962747,
+    "workingSetBytes": 678854656,
+    "frameSampleCount": 3600
+  },
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+    "platform": "Win32",
+    "hardwareConcurrency": 16,
+    "deviceMemoryGiB": 8,
+    "devicePixelRatio": 1,
+    "screen": [1920, 1080],
+    "webglVendor": "Google Inc. (Intel)",
+    "webglRenderer": "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x000046A6) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "jsHeapBytes": 24668457
+  },
+  "runtimeErrors": [],
+  "criteria": {
+    "averageFps": true,
+    "p95FrameTime": true,
+    "coldStart": true,
+    "save": true,
+    "load": true,
+    "undoRedo": true,
+    "inputResponse": true,
+    "workingSet": true,
+    "consoleErrors": true
+  },
+  "passed": true
+}

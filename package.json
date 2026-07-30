@@ -1,0 +1,49 @@
+{
+  "name": "forge-studio",
+  "version": "0.6.0-alpha",
+  "private": true,
+  "type": "module",
+  "description": "A lightweight browser-based low-poly asset editor for Godot and Unity.",
+  "engines": {
+    "node": "24.14.0",
+    "npm": "11.9.0"
+  },
+  "scripts": {
+    "schema:generate": "node scripts/generate-schema-validator.mjs",
+    "fixture:performance": "node scripts/generate-performance-fixture.mjs",
+    "evidence:legacy": "node scripts/capture-legacy-evidence.mjs",
+    "predev": "npm run schema:generate",
+    "dev": "vite --host 127.0.0.1",
+    "prebuild": "npm run schema:generate",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "pretest": "npm run schema:generate",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "test:all": "npm run lint && npm run format:check && npm run test && npm run build && npm run test:e2e",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "audit": "npm audit --audit-level=high",
+    "licenses": "node scripts/generate-third-party-licenses.mjs",
+    "preperformance": "npm run build && npm run fixture:performance",
+    "performance": "node scripts/measure-performance.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "three": "0.181.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.0",
+    "eslint": "10.8.0",
+    "gltf-validator": "2.0.0-dev.3.10",
+    "jsdom": "29.1.1",
+    "license-checker-rseidelsohn": "5.0.1",
+    "prettier": "3.9.6",
+    "vite": "8.2.0",
+    "vitest": "4.1.10"
+  }
+}

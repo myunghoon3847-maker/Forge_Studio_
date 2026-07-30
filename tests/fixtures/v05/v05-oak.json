@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "objects": [
+    {
+      "type": "cylinder",
+      "name": "참나무 줄기",
+      "color": 7293483,
+      "roughness": 0.55,
+      "metalness": 0.05,
+      "position": [0, 1.35, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.46, 1.25, 0.46]
+    },
+    {
+      "type": "sphere",
+      "name": "참나무 잎 1",
+      "color": 3968075,
+      "roughness": 0.9,
+      "metalness": 0.05,
+      "position": [0, 3.1, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1.05, 0.8, 1.05]
+    },
+    {
+      "type": "sphere",
+      "name": "참나무 잎 2",
+      "color": 3968075,
+      "roughness": 0.9,
+      "metalness": 0.05,
+      "position": [0.75, 2.8, 0.15],
+      "rotation": [0, 0, 0],
+      "scale": [1.05, 0.8, 1.05]
+    },
+    {
+      "type": "sphere",
+      "name": "참나무 잎 3",
+      "color": 3968075,
+      "roughness": 0.9,
+      "metalness": 0.05,
+      "position": [-0.7, 2.75, 0.25],
+      "rotation": [0, 0, 0],
+      "scale": [1.05, 0.8, 1.05]
+    },
+    {
+      "type": "sphere",
+      "name": "참나무 잎 4",
+      "color": 3968075,
+      "roughness": 0.9,
+      "metalness": 0.05,
+      "position": [0.15, 3.55, 0.35],
+      "rotation": [0, 0, 0],
+      "scale": [1.05, 0.8, 1.05]
+    }
+  ]
+}

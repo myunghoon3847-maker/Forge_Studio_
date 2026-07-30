@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "objects": [
+    {
+      "type": "rock",
+      "name": "바위 시각 회귀",
+      "color": 7633282,
+      "roughness": 1,
+      "metalness": 0.12,
+      "position": [0, 1.1, 0],
+      "rotation": [0.1, 0.2, 0.3],
+      "scale": [1.2, 0.8, 0.9]
+    }
+  ]
+}

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1b1d22" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'"
+    />
+    <meta
+      name="description"
+      content="Forge Studio — browser-based low-poly asset editor for Godot and Unity."
+    />
+    <title>Forge Studio v0.6-alpha</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="./assets/index-C_v7WvHJ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Bu_GkEO-.css">
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Forge Studio">
+          <div class="brand-mark" aria-hidden="true">F</div>
+          <div>
+            <strong>Forge Studio</strong>
+            <span>Low-poly asset editor · v0.6-alpha</span>
+          </div>
+        </div>
+        <nav class="action-row" aria-label="프로젝트 작업">
+          <button type="button" data-testid="new-project" id="new-project">새 프로젝트</button>
+          <button type="button" data-testid="open-project" id="open-project">열기</button>
+          <input
+            id="project-file"
+            class="visually-hidden"
+            type="file"
+            aria-label="프로젝트 파일 선택"
+            accept=".forge.json,.json,application/json"
+          />
+          <button type="button" data-testid="save-project" id="save-project">저장</button>
+          <button type="button" class="primary" data-testid="export-glb" id="export-glb">
+            GLB 내보내기
+          </button>
+        </nav>
+      </header>
+
+      <nav class="toolbar" aria-label="편집 도구">
+        <div class="tool-group">
+          <button type="button" data-tool="select" data-testid="tool-select" title="선택 (Q)">
+            선택 <kbd>Q</kbd>
+          </button>
+          <button type="button" data-tool="translate" data-testid="tool-move" title="이동 (W)">
+            이동 <kbd>W</kbd>
+          </button>
+          <button type="button" data-tool="rotate" data-testid="tool-rotate" title="회전 (E)">
+            회전 <kbd>E</kbd>
+          </button>
+          <button type="button" data-tool="scale" data-testid="tool-scale" title="크기 (R)">
+            크기 <kbd>R</kbd>
+          </button>
+          <span class="toolbar-divider" aria-hidden="true"></span>
+          <button
+            type="button"
+            data-command="duplicate"
+            data-testid="duplicate"
+            title="복제 (Ctrl+D)"
+          >
+            복제
+          </button>
+          <button type="button" data-command="delete" data-testid="delete" title="삭제 (Delete)">
+            삭제
+          </button>
+          <button type="button" data-command="ground" data-testid="ground-align" title="바닥 맞춤">
+            바닥 맞춤
+          </button>
+          <button type="button" data-command="group" data-testid="group" title="그룹 (Ctrl+G)">
+            그룹
+          </button>
+          <button
+            type="button"
+            data-command="ungroup"
+            data-testid="ungroup"
+            title="그룹 해제 (Ctrl+Shift+G)"
+          >
+            해제
+          </button>
+          <button type="button" data-command="lock" data-testid="toggle-lock" title="잠금 전환">
+            잠금
+          </button>
+          <button type="button" data-command="hide" data-testid="toggle-visible" title="표시 전환">
+            숨김
+          </button>
+        </div>
+        <div class="tool-group">
+          <button type="button" data-command="undo" data-testid="undo" title="실행 취소 (Ctrl+Z)">
+            ↶
+            <span class="visually-hidden">실행 취소</span>
+          </button>
+          <button type="button" data-command="redo" data-testid="redo" title="다시 실행 (Ctrl+Y)">
+            ↷
+            <span class="visually-hidden">다시 실행</span>
+          </button>
+          <label class="view-select-label" for="view-select">보기</label>
+          <select id="view-select" data-testid="view-select" aria-label="카메라 보기">
+            <option value="perspective">원근</option>
+            <option value="front">정면</option>
+            <option value="back">후면</option>
+            <option value="left">좌측</option>
+            <option value="right">우측</option>
+            <option value="top">상단</option>
+            <option value="bottom">하단</option>
+          </select>
+        </div>
+      </nav>
+
+      <div class="workspace">
+        <aside class="panel left-panel" aria-label="에셋 라이브러리">
+          <section class="panel-section template-section">
+            <div class="section-title-row">
+              <div>
+                <p class="eyebrow">ASSET LIBRARY</p>
+                <h2>템플릿</h2>
+              </div>
+              <span id="template-count" class="count-chip">20</span>
+            </div>
+            <label class="search-field" for="template-search">
+              <span class="visually-hidden">템플릿 검색</span>
+              <input
+                id="template-search"
+                data-testid="template-search"
+                type="search"
+                placeholder="템플릿 검색"
+                autocomplete="off"
+              />
+            </label>
+            <label class="category-label" for="template-category">카테고리</label>
+            <select id="template-category" data-testid="template-category">
+              <option value="all">전체</option>
+              <option value="nature">자연</option>
+              <option value="building">건축</option>
+              <option value="prop">소품</option>
+              <option value="weapon">무기</option>
+              <option value="character">캐릭터</option>
+            </select>
+            <div id="template-grid" class="template-grid" aria-live="polite"></div>
+          </section>
+
+          <section class="panel-section primitive-section">
+            <p class="eyebrow">PRIMITIVES</p>
+            <h2>기본 도형</h2>
+            <div class="primitive-grid">
+              <button type="button" data-primitive="box" data-testid="primitive-box">
+                <span aria-hidden="true">□</span>Cube
+              </button>
+              <button type="button" data-primitive="sphere" data-testid="primitive-sphere">
+                <span aria-hidden="true">●</span>Sphere
+              </button>
+              <button type="button" data-primitive="cylinder" data-testid="primitive-cylinder">
+                <span aria-hidden="true">◉</span>Cylinder
+              </button>
+              <button type="button" data-primitive="cone" data-testid="primitive-cone">
+                <span aria-hidden="true">▲</span>Cone
+              </button>
+              <button type="button" data-primitive="plane" data-testid="primitive-plane">
+                <span aria-hidden="true">▱</span>Plane
+              </button>
+              <button type="button" data-primitive="torus" data-testid="primitive-torus">
+                <span aria-hidden="true">◌</span>Torus
+              </button>
+            </div>
+          </section>
+        </aside>
+
+        <main class="viewport-shell" aria-label="3D Viewport">
+          <div id="viewport" class="viewport" data-testid="viewport"></div>
+          <div class="viewport-badge view-badge" id="view-badge">사용자 원근</div>
+          <div class="viewport-badge viewport-stats" id="viewport-stats">
+            <span>Objects <strong id="viewport-object-count">0</strong></span>
+            <span>Triangles <strong id="triangle-count">0</strong></span>
+          </div>
+          <div class="viewport-help">
+            클릭 선택 · Shift+클릭 다중 선택 · 드래그 Orbit · 우클릭 Pan · 휠 Zoom · F Frame
+          </div>
+          <section id="empty-state" class="empty-state" aria-labelledby="empty-title">
+            <p class="eyebrow">START BUILDING</p>
+            <h1 id="empty-title">첫 에셋을 만들어보세요</h1>
+            <p>템플릿 Root를 불러오거나 Primitive로 직접 시작할 수 있습니다.</p>
+            <div class="empty-actions">
+              <button type="button" class="primary" data-quick-template="nature.oak">
+                🌳 참나무
+              </button>
+              <button type="button" data-quick-template="prop.crate">📦 나무상자</button>
+              <button type="button" data-quick-template="weapon.sword">⚔️ 검</button>
+            </div>
+          </section>
+          <section id="webgl-error" class="empty-state hidden" role="alert">
+            <h1>WebGL2가 필요합니다</h1>
+            <p>지원되는 Chrome 또는 Edge에서 하드웨어 가속을 활성화해 주세요.</p>
+          </section>
+        </main>
+
+        <aside class="panel right-panel" aria-label="Hierarchy와 Inspector">
+          <section class="hierarchy-section">
+            <div class="section-title-row right-title">
+              <div>
+                <p class="eyebrow">SCENE</p>
+                <h2>Hierarchy</h2>
+              </div>
+              <span id="hierarchy-count" class="count-chip">0</span>
+            </div>
+            <div id="hierarchy-empty" class="panel-empty">Scene이 비어 있습니다.</div>
+            <div id="hierarchy-tree" class="hierarchy-tree" role="tree"></div>
+          </section>
+
+          <section class="inspector-section">
+            <div class="section-title-row right-title">
+              <div>
+                <p class="eyebrow">PROPERTIES</p>
+                <h2>Inspector</h2>
+              </div>
+              <span id="selection-count" class="count-chip">0 selected</span>
+            </div>
+            <div id="inspector-empty" class="panel-empty">오브젝트를 선택하세요.</div>
+            <form id="inspector-form" class="inspector-form hidden">
+              <label>
+                이름
+                <input id="object-name" data-testid="object-name" type="text" maxlength="120" />
+              </label>
+
+              <fieldset id="transform-fieldset">
+                <legend>Transform</legend>
+                <div class="vector-label">
+                  <span>Position</span><span>X</span><span>Y</span><span>Z</span>
+                </div>
+                <div class="vector-row">
+                  <span>m</span>
+                  <input
+                    id="position-x"
+                    data-vector="position"
+                    data-axis="0"
+                    type="number"
+                    step="0.1"
+                  />
+                  <input
+                    id="position-y"
+                    data-vector="position"
+                    data-axis="1"
+                    type="number"
+                    step="0.1"
+                  />
+                  <input
+                    id="position-z"
+                    data-vector="position"
+                    data-axis="2"
+                    type="number"
+                    step="0.1"
+                  />
+                </div>
+                <div class="vector-label">
+                  <span>Rotation</span><span>X</span><span>Y</span><span>Z</span>
+                </div>
+                <div class="vector-row">
+                  <span>°</span>
+                  <input
+                    id="rotation-x"
+                    data-vector="rotation"
+                    data-axis="0"
+                    type="number"
+                    step="1"
+                  />
+                  <input
+                    id="rotation-y"
+                    data-vector="rotation"
+                    data-axis="1"
+                    type="number"
+                    step="1"
+                  />
+                  <input
+                    id="rotation-z"
+                    data-vector="rotation"
+                    data-axis="2"
+                    type="number"
+                    step="1"
+                  />
+                </div>
+                <div class="vector-label">
+                  <span>Scale</span><span>X</span><span>Y</span><span>Z</span>
+                </div>
+                <div class="vector-row">
+                  <span>×</span>
+                  <input
+                    id="scale-x"
+                    data-vector="scale"
+                    data-axis="0"
+                    type="number"
+                    step="0.1"
+                    min="0.000002"
+                  />
+                  <input
+                    id="scale-y"
+                    data-vector="scale"
+                    data-axis="1"
+                    type="number"
+                    step="0.1"
+                    min="0.000002"
+                  />
+                  <input
+                    id="scale-z"
+                    data-vector="scale"
+                    data-axis="2"
+                    type="number"
+                    step="0.1"
+                    min="0.000002"
+                  />
+                </div>
+              </fieldset>
+
+              <fieldset id="material-fieldset">
+                <legend>Material</legend>
+                <label class="inline-control"
+                  >색상 <input id="material-color" type="color"
+                /></label>
+                <label
+                  >거칠기 <input id="material-roughness" type="range" min="0" max="1" step="0.01"
+                /></label>
+                <label
+                  >금속성 <input id="material-metalness" type="range" min="0" max="1" step="0.01"
+                /></label>
+                <label
+                  >불투명도
+                  <input id="material-opacity" type="range" min="0.01" max="1" step="0.01"
+                /></label>
+                <label class="checkbox-row">
+                  <input id="material-wireframe" type="checkbox" /> Wireframe
+                </label>
+                <label class="checkbox-row">
+                  <input id="material-flat" type="checkbox" /> Flat shading
+                </label>
+              </fieldset>
+
+              <fieldset>
+                <legend>Object State</legend>
+                <label class="checkbox-row">
+                  <input id="object-visible" type="checkbox" /> Visible
+                </label>
+                <label class="checkbox-row">
+                  <input id="object-locked" type="checkbox" /> Locked
+                </label>
+              </fieldset>
+              <p id="inspector-note" class="muted-note"></p>
+            </form>
+          </section>
+        </aside>
+      </div>
+
+      <footer class="statusbar">
+        <span id="status-message" role="status" aria-live="polite">준비됨</span>
+        <span class="status-summary">
+          <span id="dirty-state">저장됨</span>
+          <span>Objects <strong id="footer-object-count">0</strong></span>
+          <span>Selection <strong id="footer-selection">없음</strong></span>
+          <span>Tool <strong id="footer-tool">Select</strong></span>
+        </span>
+      </footer>
+    </div>
+
+    <div id="error-toast" class="toast hidden" role="alert">
+      <strong id="error-title">오류</strong>
+      <span id="error-message"></span>
+      <code id="error-code"></code>
+      <button type="button" id="dismiss-error" aria-label="오류 닫기">×</button>
+    </div>
+
+    <dialog id="discard-dialog" aria-labelledby="discard-title">
+      <form method="dialog">
+        <p class="eyebrow">UNSAVED CHANGES</p>
+        <h2 id="discard-title">저장하지 않은 변경사항을 버릴까요?</h2>
+        <p>계속하면 마지막 저장 이후의 편집 내용이 사라집니다.</p>
+        <div class="dialog-actions">
+          <button type="submit" value="cancel">취소</button>
+          <button type="submit" class="danger" value="discard">변경사항 버리기</button>
+        </div>
+      </form>
+    </dialog>
+
+  </body>
+</html>

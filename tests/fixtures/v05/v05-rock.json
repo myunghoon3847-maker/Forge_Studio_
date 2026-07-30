@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "objects": [
+    {
+      "type": "rock",
+      "name": "바위 원본",
+      "color": 7633282,
+      "roughness": 1,
+      "metalness": 0.12,
+      "flatShading": true,
+      "position": [1, 2, 3],
+      "rotation": [0.1, 0.2, 0.3],
+      "scale": [1.2, 0.8, 0.9],
+      "radius": 1.2,
+      "detail": 1
+    }
+  ]
+}

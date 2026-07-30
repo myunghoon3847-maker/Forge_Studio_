@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "objects": [
+    {
+      "type": "box",
+      "name": "검날",
+      "color": 13094616,
+      "roughness": 0.2,
+      "metalness": 0.8,
+      "position": [0, 2.15, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.18, 1.55, 0.06]
+    },
+    {
+      "type": "cone",
+      "name": "검끝",
+      "color": 13094616,
+      "roughness": 0.55,
+      "metalness": 0.8,
+      "position": [0, 3.82, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.18, 0.25, 0.07]
+    },
+    {
+      "type": "box",
+      "name": "가드",
+      "color": 13210930,
+      "roughness": 0.55,
+      "metalness": 0.65,
+      "position": [0, 0.85, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.72, 0.1, 0.15]
+    },
+    {
+      "type": "cylinder",
+      "name": "손잡이",
+      "color": 5452838,
+      "roughness": 0.55,
+      "metalness": 0.05,
+      "position": [0, 0.35, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.16, 0.4, 0.16]
+    },
+    {
+      "type": "sphere",
+      "name": "폼멜",
+      "color": 13210930,
+      "roughness": 0.55,
+      "metalness": 0.6,
+      "position": [0, -0.12, 0],
+      "rotation": [0, 0, 0],
+      "scale": [0.22, 0.22, 0.22]
+    }
+  ]
+}

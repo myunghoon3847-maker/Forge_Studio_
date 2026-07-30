@@ -1,0 +1,670 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:forge-studio:schema:project:2",
+  "title": "Forge Studio Project Schema v2",
+  "description": "Authoritative file schema for Forge Studio .forge.json projects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "appVersion", "project", "settings", "scene"],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 2
+    },
+    "appVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "project": {
+      "$ref": "#/$defs/projectMetadata"
+    },
+    "settings": {
+      "$ref": "#/$defs/projectSettings"
+    },
+    "scene": {
+      "$ref": "#/$defs/scene"
+    }
+  },
+  "$defs": {
+    "projectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "createdAt", "updatedAt"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": ".*\\S.*"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "projectSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["units", "upAxis", "assetFront", "gridSize", "backgroundColor"],
+      "properties": {
+        "units": {
+          "type": "string",
+          "const": "meter"
+        },
+        "upAxis": {
+          "type": "string",
+          "const": "Y"
+        },
+        "assetFront": {
+          "type": "string",
+          "const": "+Z"
+        },
+        "gridSize": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 1000
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color"
+        }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objects"],
+      "properties": {
+        "objects": {
+          "type": "array",
+          "maxItems": 5000,
+          "items": {
+            "$ref": "#/$defs/sceneObject"
+          }
+        }
+      }
+    },
+    "sceneObject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/groupObject"
+        },
+        {
+          "$ref": "#/$defs/meshObject"
+        }
+      ]
+    },
+    "baseObject": {
+      "type": "object",
+      "required": ["id", "type", "name", "parentId", "visible", "locked", "transform"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["group", "mesh"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": ".*\\S.*"
+        },
+        "parentId": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "format": "uuid"
+            }
+          ]
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "transform": {
+          "$ref": "#/$defs/transform"
+        },
+        "editor": {
+          "$ref": "#/$defs/editorMetadata"
+        }
+      }
+    },
+    "groupObject": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "group"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "meshObject": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseObject"
+        },
+        {
+          "type": "object",
+          "required": ["geometry", "material"],
+          "properties": {
+            "type": {
+              "const": "mesh"
+            },
+            "geometry": {
+              "$ref": "#/$defs/geometry"
+            },
+            "material": {
+              "$ref": "#/$defs/material"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position", "rotation", "scale"],
+      "properties": {
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "scale": {
+          "$ref": "#/$defs/scale"
+        }
+      }
+    },
+    "position": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/signedCoordinate"
+        },
+        {
+          "$ref": "#/$defs/signedCoordinate"
+        },
+        {
+          "$ref": "#/$defs/signedCoordinate"
+        }
+      ],
+      "items": false
+    },
+    "rotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "radians"],
+      "properties": {
+        "order": {
+          "type": "string",
+          "const": "XYZ"
+        },
+        "radians": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/signedAngle"
+            },
+            {
+              "$ref": "#/$defs/signedAngle"
+            },
+            {
+              "$ref": "#/$defs/signedAngle"
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "scale": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/positiveScale"
+        },
+        {
+          "$ref": "#/$defs/positiveScale"
+        },
+        {
+          "$ref": "#/$defs/positiveScale"
+        }
+      ],
+      "items": false
+    },
+    "signedCoordinate": {
+      "type": "number",
+      "minimum": -1000000,
+      "maximum": 1000000
+    },
+    "signedAngle": {
+      "type": "number",
+      "minimum": -1000000,
+      "maximum": 1000000
+    },
+    "positiveScale": {
+      "type": "number",
+      "exclusiveMinimum": 0.000001,
+      "maximum": 10000
+    },
+    "editorMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["templateRole"],
+      "properties": {
+        "templateRole": {
+          "type": "string",
+          "enum": ["none", "root", "part"]
+        },
+        "templateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "templateVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "templateRootId": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "format": "uuid"
+            }
+          ]
+        }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "color",
+        "roughness",
+        "metalness",
+        "opacity",
+        "transparent",
+        "wireframe",
+        "flatShading",
+        "side"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "meshStandard"
+        },
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "roughness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "metalness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "opacity": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "transparent": {
+          "type": "boolean"
+        },
+        "wireframe": {
+          "type": "boolean"
+        },
+        "flatShading": {
+          "type": "boolean"
+        },
+        "side": {
+          "type": "string",
+          "enum": ["front", "back", "double"]
+        }
+      }
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "geometry": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/boxGeometry"
+        },
+        {
+          "$ref": "#/$defs/sphereGeometry"
+        },
+        {
+          "$ref": "#/$defs/cylinderGeometry"
+        },
+        {
+          "$ref": "#/$defs/coneGeometry"
+        },
+        {
+          "$ref": "#/$defs/planeGeometry"
+        },
+        {
+          "$ref": "#/$defs/torusGeometry"
+        },
+        {
+          "$ref": "#/$defs/icosahedronGeometry"
+        }
+      ]
+    },
+    "boxGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "box"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height",
+            "depth",
+            "widthSegments",
+            "heightSegments",
+            "depthSegments"
+          ],
+          "properties": {
+            "width": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "height": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "depth": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "widthSegments": {
+              "$ref": "#/$defs/linearSegments"
+            },
+            "heightSegments": {
+              "$ref": "#/$defs/linearSegments"
+            },
+            "depthSegments": {
+              "$ref": "#/$defs/linearSegments"
+            }
+          }
+        }
+      }
+    },
+    "sphereGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "sphere"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["radius", "widthSegments", "heightSegments"],
+          "properties": {
+            "radius": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "widthSegments": {
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 256
+            },
+            "heightSegments": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 256
+            }
+          }
+        }
+      }
+    },
+    "cylinderGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "cylinder"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "radiusTop",
+            "radiusBottom",
+            "height",
+            "radialSegments",
+            "heightSegments",
+            "openEnded"
+          ],
+          "properties": {
+            "radiusTop": {
+              "$ref": "#/$defs/nonNegativeLength"
+            },
+            "radiusBottom": {
+              "$ref": "#/$defs/nonNegativeLength"
+            },
+            "height": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "radialSegments": {
+              "$ref": "#/$defs/radialSegments"
+            },
+            "heightSegments": {
+              "$ref": "#/$defs/linearSegments"
+            },
+            "openEnded": {
+              "type": "boolean"
+            }
+          },
+          "anyOf": [
+            {
+              "properties": {
+                "radiusTop": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            },
+            {
+              "properties": {
+                "radiusBottom": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "coneGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "cone"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["radius", "height", "radialSegments", "heightSegments", "openEnded"],
+          "properties": {
+            "radius": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "height": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "radialSegments": {
+              "$ref": "#/$defs/radialSegments"
+            },
+            "heightSegments": {
+              "$ref": "#/$defs/linearSegments"
+            },
+            "openEnded": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "planeGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "plane"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "height", "widthSegments", "heightSegments"],
+          "properties": {
+            "width": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "height": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "widthSegments": {
+              "$ref": "#/$defs/linearSegments"
+            },
+            "heightSegments": {
+              "$ref": "#/$defs/linearSegments"
+            }
+          }
+        }
+      }
+    },
+    "torusGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "torus"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["radius", "tube", "radialSegments", "tubularSegments", "arc"],
+          "properties": {
+            "radius": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "tube": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "radialSegments": {
+              "$ref": "#/$defs/radialSegments"
+            },
+            "tubularSegments": {
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 512
+            },
+            "arc": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 6.283185307179586
+            }
+          }
+        }
+      }
+    },
+    "icosahedronGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "parameters"],
+      "properties": {
+        "kind": {
+          "const": "icosahedron"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["radius", "detail"],
+          "properties": {
+            "radius": {
+              "$ref": "#/$defs/positiveLength"
+            },
+            "detail": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            }
+          }
+        }
+      }
+    },
+    "positiveLength": {
+      "type": "number",
+      "exclusiveMinimum": 0.000001,
+      "maximum": 10000
+    },
+    "nonNegativeLength": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "linearSegments": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 64
+    },
+    "radialSegments": {
+      "type": "integer",
+      "minimum": 3,
+      "maximum": 256
+    }
+  }
+}
